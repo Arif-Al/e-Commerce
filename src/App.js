@@ -1,14 +1,14 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import AppLayout from './components/Layout/AppLayout';
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignIn from './components/sign-in/SignIn';
 import SignUp from './components/sign-up/SignUp';
 import PageNotFound from './components/page-not-found/PageNotFound';
+import Header from './components/Layout/Header';
 
 function App() {
   const router = createBrowserRouter([
-    {  path: "/", element: <AppLayout />,
+    {  path: "/", element: <Header />,
        errorElement: <PageNotFound />  },
     { 
        path: "/sign-in", element: <SignIn /> 

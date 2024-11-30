@@ -26,7 +26,7 @@ interface Props {
 const drawerWidth = 240;
 const navItems = ['Home', 'About', 'Contact'];
 
-function AppLayout(props: Props) {
+function Header(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -64,7 +64,7 @@ function AppLayout(props: Props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box className="mb-5" sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
@@ -133,12 +133,10 @@ function AppLayout(props: Props) {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3 }}>
-        <Toolbar />
-        <ProdectsCard  />
-      </Box>
+      <ProdectsCard/>
+    
     </Box>
   );
 }
 
-export default AppLayout;
+export default Header;
