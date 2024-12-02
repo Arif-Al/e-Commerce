@@ -5,6 +5,8 @@ import SignIn from './components/sign-in/SignIn';
 import SignUp from './components/sign-up/SignUp';
 import PageNotFound from './components/page-not-found/PageNotFound';
 import Header from './components/Layout/Header';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 function App() {
   const router = createBrowserRouter([
@@ -19,7 +21,10 @@ function App() {
   ]);
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <Provider store={store}>
+              <RouterProvider router={router} />
+
+      </Provider>
     </div>
   );
 }
