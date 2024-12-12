@@ -7,6 +7,7 @@ import {
   Grid,
   Rating,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,138 +20,152 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import InfoIcon from "@mui/icons-material/Info";
+import { Link } from "react-router-dom";
+import { addToCart } from "../Slices/cart/cartItems";
+import { useDispatch } from "react-redux";
 
 const ProdectsCard = () => {
-  const [filterCategories , setFilterCategories] = useState()
+  const [filterCategorie, setFilterCategories] = useState([]);
   const [Products, setProducts] = useState([]);
-  const [isLoad , setLoad] = useState(true)
-  const [categoryArr , setCategory] = useState([])
-  console.log(Products, "products");
+  const [isLoad, setLoad] = useState(true);
+  const [categoryArr, setCategory] = useState([]);
+  // console.log(Products, "products");
+
+  const dispactch = useDispatch()
 
   const filterProducts = (categoryProduct) => {
-    const filterCategory = Products.filter((item) => item.category.name === categoryProduct.value)
+    const filterCategory = Products.filter(
+      (item) => item.category === categoryProduct.value
+    );
 
-    setFilterCategories(filterCategory)
-    console.log(filterCategory , "filterCAtegory");
-    
-  }
+    setFilterCategories(filterCategory);
+    // console.log(filterCategory, "filterCAtegory");
+  };
 
   useEffect(() => {
     const ProduCards = axios
-      .get("https://api.escuelajs.co/api/v1/products")
+      .get("https://fakestoreapi.com/products")
       .then((data) => {
-        const FilterData = data.data.filter(
-          (Products) => Products.title !== "New Product"
-        );
-
-        const categoryArr = FilterData.map((item) => {
+        const categoryArr = data.data.map((item) => {
           return {
-            label : item.category.name,
-            value : item.category.name
-          }
-        }) 
+            label: item.category,
+            value: item.category,
+          };
+        });
 
-        const uniqueArr = categoryArr.filter((item,index,self) => index === self.findIndex((t) => t.value === item.value)) 
-        console.log(categoryArr ,  "category");
-        
-        setCategory(uniqueArr)
-        setProducts(FilterData);
-        setFilterCategories(FilterData);
-        setLoad(false)
-      
+        const uniqueArr = categoryArr.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.value === item.value)
+        );
+        // console.log(categoryArr, "category");
 
+        setCategory(uniqueArr);
+        setProducts(data.data);
+        setFilterCategories(data.data);
+        setLoad(false);
       });
-
-      
   }, []);
 
-
   return (
-    <>
-      <Grid container spacing={3} className="mt-5 ms-5">
-   <Box className="mt-5 ">
-   <Autocomplete
-      disablePortal
-      options={categoryArr}
-      sx={{ width: 300 }}
-      onChange={(e, newValue) => {
-      filterProducts(newValue);
-        
-      }}
-      renderInput={(params) => <TextField {...params} label="Category" />}
-    />
-   </Box>
-        { isLoad ? <Box className="my-5 w-100 text-center">
-          <CircularProgress size="3rem" />
-        </Box> :
-        filterCategories?.map((product) => (
-          <Grid item sm={2}>
-            <Card key={product.id} className="text-center px-3 m-3 ">
-              <Swiper
-                spaceBetween={30}
-                centeredSlides={true}
-                autoplay={{
-                  delay: 5500,
-                  disableOnInteraction: false,
-                }}
-                pagination={{
-                  clickable: true,
-                }}
-                navigation={false}
-                modules={[Autoplay, Pagination, Navigation]}
-                className="mySwiper"
-              >
-                {product?.images.map((img) => {
-                  return (
-                    <SwiperSlide>
-                      <img
-                        src={img}
-                        className="img-fluid"
-                        alt={product.title}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
+    <div>
+       <Box className="mt-5 ms-3">
+          <Autocomplete
+            disablePortal
+            options={categoryArr}
+            sx={{ width: 300 }}
+            onChange={(e, newValue) => {
+              filterProducts(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} label="Category" />}
+          />
+        </Box>
+      <Grid container spacing={5} className="mt-5">
+        {isLoad ? (
+         
+           <Box className="my-5 w-100 text-center">
+            <CircularProgress size="3rem" />
+          </Box>
+        ) : (
+          filterCategorie?.map((product) => (
+            <Grid item sm={2}>
+              <Card style={{maxWidth:"370px", minWidth:"200px"}} key={product.id} className="mx-3">
+                <Swiper
+                  spaceBetween={50}
+                  centeredSlides={true}
+                  autoplay={{
+                    delay: 5500,
+                    disableOnInteraction: false,
+                  }}
+                  pagination={{
+                    clickable: true,
+                  }}
+                  navigation={false}
+                  modules={[Autoplay, Pagination, Navigation]}
+                  className="mySwiper"
+                >
+                  <SwiperSlide className="text-center">
+                    <img
+                      width={"200px"}
+                      height={"250px"}
+                      className=""
+                      src={product.image} // Direct image URL from Fake Store API
+                     
+                      alt={product.title}
+                    />
+                  </SwiperSlide>
+                  <SwiperSlide className="text-center">
+                    <img
+                      width={"200px"}
+                      height={"250px"}
+                      src={product.image} // Direct image URL from Fake Store API
+                        
+                      alt={product.title}
+                    />
+                  </SwiperSlide>
+                </Swiper>
+                <Box className="text-start">
+                  <Typography variant="body2" className="mt-2 text-start ms-2">
+                    {product?.category}
+                  </Typography>
+                  <Typography variant="h6" className="mt-2 text-start ms-2" sx={{cursor: "pointer"}}>
+                    <Tooltip title={product.title} placement="top">
+                    {product?.title.length > 15
+                      ? `${product?.title.slice(0, 15)}...`
+                      : product?.title}
+                      </Tooltip>
+                  </Typography>
+                  <Rating className="ms-2"
+                    name="read-only"
+                    value={Math.round(product?.rating?.rate) || 0}
+                    readOnly
+                  />
 
-                <SwiperSlide>
-                  <img
-                    src={product?.images[0]}
-                    className="img-fluid"
-                    alt={product.title}
-                  />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img
-                    src={product?.images[0]}
-                    className="img-fluid"
-                    alt={product.title}
-                  />
-                </SwiperSlide>
-              </Swiper>
-              <Box className="text-start">
-                <Typography variant="body2" className="mt-2 text-start">
-                  {product?.category?.name}
-                </Typography>
-                <Typography variant="h6" className="mt-2 text-start">
-                  {product?.title}
-                </Typography>
-                <Rating
-                  name="read-only"
-                  value={Math.round(product?.rating) || 0}
-                  readOnly
-                />
-                <Typography variant="h6" className="tex">
-                  ${product?.price}
-                </Typography>
-                <Button className="my-3" variant="contained">
-                  <AddIcon /> Add
-                </Button>
-              </Box>
-            </Card>
-          </Grid>
-        ))}
+                  <Box className="d-flex justify-content-between align-items-center bg-primary text-white">
+                    <Typography variant="h6" className="ms-2">
+                      $ {product?.price}
+                    </Typography>
+                    <Link to={`/ProfuctDetails/${product?.id}`}>
+                      <Tooltip
+                        sx={{ cursor: "pointer" }}
+                        title="Details"
+                        placement="top"
+                      >
+                        <InfoIcon className="ms-4 text-white" />
+                      </Tooltip>
+                    </Link>
+
+                    <Button className="my-3 me-3" variant="contained" onClick={()=> dispactch(addToCart(product))}> 
+                      <AddIcon /> Add
+                    </Button>
+                  </Box>
+                </Box>
+              </Card>
+            </Grid>
+          ))
+        )}
       </Grid>
-    </>
+    </div>
   );
 };
 

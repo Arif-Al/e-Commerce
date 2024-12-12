@@ -10,7 +10,7 @@ export const counterSlice = createSlice({
 } )
 
 
-export const {} = counterSlice.actions;
+export const {cartItems} = counterSlice.actions;
 
 export default counterSlice.reducer;
 

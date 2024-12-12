@@ -37,16 +37,18 @@ console.log(errors, 'errors');
 
   return (
     <>
-      <form
+    
+        <Box className="container mt-5">
+          <Box className="d-flex justify-content-around align-items-center flex-wrap mt-5">
+          <Box className="">
+              <img src={logo} className="img-fluid" alt="" />
+            </Box>
+          <form
         onSubmit={handleSubmit((data) => {
           console.log(data);
         })}
       >
-        <Box className="container-fluid mt-5">
-          <Box className="d-flex justify-content-around align-items-center flex-wrap">
-            <Box>
-              <img src={logo} className="img-fluid" alt="" />
-            </Box>
+           
               <Box>
               <Box className="text-start">
               <Typography variant="h5" >
@@ -140,9 +142,10 @@ console.log(errors, 'errors');
 
                 <Button  type="submit" size="small" fullWidth variant="contained"> Sign Up</Button>
               </Box>
+              </form>
             </Box>
           </Box>
-      </form>
+    
     </>
   );
 };

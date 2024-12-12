@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 import ProdectsCard from "../prodect-card/ProdectsCard";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Badge, Menu, MenuItem } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import DrawerItems from "../Drawer/DrawerItems";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useSelector } from "react-redux";
@@ -36,7 +36,7 @@ function Header(props: Props) {
   const open = Boolean(anchorEl);
 
   const [openItems, setOpenItems] = React.useState(false);
-  const {count} = useSelector((state)=> state.counter)
+  const {cartItem} = useSelector((state)=> state.cart)
   // console.log(ItemCounter , "ItemCounter");
   
   const toggleOpenItems = (newOpen) => () => {
@@ -75,7 +75,7 @@ function Header(props: Props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box className="mb-5" sx={{ display: "flex" }}>
+    <Box className="my-5" sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
@@ -102,12 +102,11 @@ function Header(props: Props) {
               </Button>
             ))}
 
-            <Button>
-              <Badge badgeContent={count} color="error">
+       
+              <Badge sx={{cursor: "pointer"}} badgeContent={cartItem?.length} color="error">
                  <ShoppingCartIcon onClick={toggleOpenItems(true)} className="text-white" />
               </Badge>
-              
-            </Button>
+ 
 
             <Button
               className="text-white"
@@ -159,7 +158,7 @@ function Header(props: Props) {
           {drawer}
         </Drawer>
       </nav>
-      <ProdectsCard />
+      <Outlet />
       <DrawerItems openItems={openItems} toggleOpenItems={toggleOpenItems} />
     </Box>
   );
