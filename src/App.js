@@ -26,7 +26,7 @@ function App() {
         element: <SignUp />,
       },
       {
-        path: "/ProfuctDetails/:Product_id",
+        path: "/ProfuctDails/:Product_id",
         element: <ProductDetails />,
       },
 

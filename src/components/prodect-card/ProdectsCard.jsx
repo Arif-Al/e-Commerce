@@ -80,7 +80,7 @@ const ProdectsCard = () => {
             renderInput={(params) => <TextField {...params} label="Category" />}
           />
         </Box>
-      <Grid container spacing={5} className="mt-5">
+      <Grid container spacing={1} className="mt-5">
         {isLoad ? (
          
            <Box className="my-5 w-100 text-center">
