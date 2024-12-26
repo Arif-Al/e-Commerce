@@ -25,10 +25,11 @@ const DrawerItems = (props) => {
       <Drawer open={openItems} onClose={toggleOpenItems(false)}>
         <Box className="container" width={"450px"}>
           <h3 className="bg-primary text-white text-center">Cart Items</h3>
+          
           {cartItem?.map((item) => {
             return (
               <>
-                <Box className="row align-items-center my-3">
+                <Box className="row align-items-center justify-content-center my-3 ">
                   <Box className="col-8">
                     <Box className="d-flex">
                       <img

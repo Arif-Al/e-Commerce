@@ -9,32 +9,37 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import ProdectsCard from "./components/prodect-card/ProdectsCard";
+import ProtectRout from "./components/Protect Rout/ProtectRout";
 
 function App() {
   const router = createBrowserRouter([
-    { path: "/", element: <Header />, 
-      children:[{
-        path:"",
-        element: <ProdectsCard />
-      },
-      {
-        path: "/sign-in",
-        element: <SignIn />,
-      },
-      {
-        path: "/sign-up",
-        element: <SignUp />,
-      },
-      {
-        path: "/ProfuctDails/:Product_id",
-        element: <ProductDetails />,
-      },
-
-    ],
-      errorElement: <PageNotFound /> },
-    
-    
-    
+    {
+      path: "/",
+      element: <Header />,
+      children: [
+        {
+          path: "",
+          element: (
+            <ProtectRout>
+              <ProdectsCard />
+            </ProtectRout>
+          ),
+        },
+        {
+          path: "/sign-in",
+          element: <SignIn />,
+        },
+        {
+          path: "/sign-up",
+          element: <SignUp />,
+        },
+        {
+          path: "/ProductDetails/:Product_id",
+          element: <ProductDetails />,
+        },
+      ],
+      errorElement: <PageNotFound />,
+    },
   ]);
   return (
     <div className="App">

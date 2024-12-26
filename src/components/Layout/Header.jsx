@@ -27,7 +27,7 @@ interface Props {
 }
 
 const drawerWidth = 240;
-const navItems = ["Home", "About", "Contact"];
+const navItems = [{id:1 , navItem:"Home" , navLink: "/"}, {is:2, navItem:"About", navLink:"/About"}, {id:3 , navItem:"Contact" , navLink:"/about"}];
 
 function Header(props: Props) {
   const { window } = props;
@@ -61,11 +61,13 @@ function Header(props: Props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <Link key={item?.id} to={item.navLink}>
+          <ListItem key={item?.id} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
+              <ListItemText primary={item?.navItem} />
             </ListItemButton>
           </ListItem>
+          </Link>
         ))}
       </List>
     </Box>
@@ -97,9 +99,11 @@ function Header(props: Props) {
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
+             <Link key={item?.id} to={item?.navLink}>
+              <Button key={item?.id} sx={{ color: "#fff" }}>
+                {item.navItem}
               </Button>
+             </Link>
             ))}
 
        

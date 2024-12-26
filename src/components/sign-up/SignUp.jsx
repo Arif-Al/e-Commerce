@@ -123,7 +123,7 @@ console.log(errors, 'errors');
                           endAdornment: (
                             <InputAdornment
                               position="start"
-                              onClick={() => setshowpassword(!showpassword)}
+                              onClick={() => setshowpassword(!showpassword)} style={{ cursor: 'pointer' }}
                             >
                               {showpassword ? (
                                 <VisibilityIcon />

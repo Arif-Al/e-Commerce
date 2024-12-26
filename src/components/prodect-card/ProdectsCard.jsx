@@ -32,7 +32,7 @@ const ProdectsCard = () => {
   const [categoryArr, setCategory] = useState([]);
   // console.log(Products, "products");
 
-  const dispactch = useDispatch()
+  const dispactch = useDispatch();
 
   const filterProducts = (categoryProduct) => {
     const filterCategory = Products.filter(
@@ -69,27 +69,30 @@ const ProdectsCard = () => {
 
   return (
     <div>
-       <Box className="mt-5 ms-3">
-          <Autocomplete
-            disablePortal
-            options={categoryArr}
-            sx={{ width: 300 }}
-            onChange={(e, newValue) => {
-              filterProducts(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} label="Category" />}
-          />
-        </Box>
+      <Box className="mt-5 ms-3">
+        <Autocomplete
+          disablePortal
+          options={categoryArr}
+          sx={{ width: 300 }}
+          onChange={(e, newValue) => {
+            filterProducts(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} label="Category" />}
+        />
+      </Box>
       <Grid container spacing={1} className="mt-5">
         {isLoad ? (
-         
-           <Box className="my-5 w-100 text-center">
+          <Box className="my-5 w-100 text-center">
             <CircularProgress size="3rem" />
           </Box>
         ) : (
           filterCategorie?.map((product) => (
             <Grid item sm={2}>
-              <Card style={{maxWidth:"370px", minWidth:"200px"}} key={product.id} className="mx-3">
+              <Card
+                style={{ maxWidth: "370px", minWidth: "200px" }}
+                key={product.id}
+                className="mx-3"
+              >
                 <Swiper
                   spaceBetween={50}
                   centeredSlides={true}
@@ -110,7 +113,6 @@ const ProdectsCard = () => {
                       height={"250px"}
                       className=""
                       src={product.image} // Direct image URL from Fake Store API
-                     
                       alt={product.title}
                     />
                   </SwiperSlide>
@@ -119,7 +121,6 @@ const ProdectsCard = () => {
                       width={"200px"}
                       height={"250px"}
                       src={product.image} // Direct image URL from Fake Store API
-                        
                       alt={product.title}
                     />
                   </SwiperSlide>
@@ -128,14 +129,19 @@ const ProdectsCard = () => {
                   <Typography variant="body2" className="mt-2 text-start ms-2">
                     {product?.category}
                   </Typography>
-                  <Typography variant="h6" className="mt-2 text-start ms-2" sx={{cursor: "pointer"}}>
+                  <Typography
+                    variant="h6"
+                    className="mt-2 text-start ms-2"
+                    sx={{ cursor: "pointer" }}
+                  >
                     <Tooltip title={product.title} placement="top">
-                    {product?.title.length > 15
-                      ? `${product?.title.slice(0, 15)}...`
-                      : product?.title}
-                      </Tooltip>
+                      {product?.title.length > 15
+                        ? `${product?.title.slice(0, 15)}...`
+                        : product?.title}
+                    </Tooltip>
                   </Typography>
-                  <Rating className="ms-2"
+                  <Rating
+                    className="ms-2"
                     name="read-only"
                     value={Math.round(product?.rating?.rate) || 0}
                     readOnly
@@ -145,17 +151,22 @@ const ProdectsCard = () => {
                     <Typography variant="h6" className="ms-2">
                       $ {product?.price}
                     </Typography>
-                    <Link to={`/ProfuctDetails/${product?.id}`}>
-                      <Tooltip
-                        sx={{ cursor: "pointer" }}
-                        title="Details"
-                        placement="top"
-                      >
-                        <InfoIcon className="ms-4 text-white" />
-                      </Tooltip>
-                    </Link>
 
-                    <Button className="my-3 me-3" variant="contained" onClick={()=> dispactch(addToCart(product))}> 
+                    <Link to={`/ProductDetails/${product?.id}`}>
+  <Tooltip
+    sx={{ cursor: "pointer" }}
+    title="Details"
+    placement="top"
+  >
+    <InfoIcon className="ms-5 text-white" />
+  </Tooltip>
+</Link>
+
+                    <Button
+                      className="my-3 me-3"
+                      variant="contained"
+                      onClick={() => dispactch(addToCart(product))}
+                    >
                       <AddIcon /> Add
                     </Button>
                   </Box>
