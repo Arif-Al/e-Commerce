@@ -24,12 +24,17 @@ import InfoIcon from "@mui/icons-material/Info";
 import { Link } from "react-router-dom";
 import { addToCart } from "../Slices/cart/cartItems";
 import { useDispatch } from "react-redux";
+import PaginationMui from "@mui/material/Pagination";
 
 const ProdectsCard = () => {
   const [filterCategorie, setFilterCategories] = useState([]);
   const [Products, setProducts] = useState([]);
   const [isLoad, setLoad] = useState(true);
   const [categoryArr, setCategory] = useState([]);
+  const [curruntPage, setCurruntPage] = useState(1);
+
+  const itemPerPage = 10;
+  const totalPage = Math.ceil(filterCategorie.length / itemPerPage);
   // console.log(Products, "products");
 
   const dispactch = useDispatch();
@@ -86,10 +91,10 @@ const ProdectsCard = () => {
             <CircularProgress size="3rem" />
           </Box>
         ) : (
-          filterCategorie?.map((product) => (
+          filterCategorie.slice((curruntPage - 1)* itemPerPage, curruntPage * itemPerPage) ?.map((product) => (
             <Grid item sm={2}>
               <Card
-                style={{ maxWidth: "370px", minWidth: "200px" }}
+                style={{ maxWidth: "300px", minWidth: "200px" }}
                 key={product.id}
                 className="mx-3"
               >
@@ -149,18 +154,18 @@ const ProdectsCard = () => {
 
                   <Box className="d-flex justify-content-between align-items-center bg-primary text-white">
                     <Typography variant="h6" className="ms-2">
-                      $ {product?.price}
+                      ${product?.price}
                     </Typography>
 
                     <Link to={`/ProductDetails/${product?.id}`}>
-  <Tooltip
-    sx={{ cursor: "pointer" }}
-    title="Details"
-    placement="top"
-  >
-    <InfoIcon className="ms-5 text-white" />
-  </Tooltip>
-</Link>
+                      <Tooltip
+                        sx={{ cursor: "pointer" }}
+                        title="Details"
+                        placement="top"
+                      >
+                        <InfoIcon className="ms-5 text-white" />
+                      </Tooltip>
+                    </Link>
 
                     <Button
                       className="my-3 me-3"
@@ -176,6 +181,11 @@ const ProdectsCard = () => {
           ))
         )}
       </Grid>
+      <Box className=" d-flex justify-content-center my-2">
+        <PaginationMui count={totalPage} variant="outlined" shape="rounded"  onChange={(e,value)=>{
+      setCurruntPage(value);
+     }} />
+      </Box>
     </div>
   );
 };
