@@ -8,6 +8,7 @@ import Skelton from "../SkeletonProductDetails/Skelton";
 import { addToCart, cartItems } from "../Slices/cart/cartItems";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import axiosClient from "../../Client/axios Intarsence";
  
 const ProductDetails = () => {
   const [Product, setProduct] = useState([]);
@@ -20,8 +21,8 @@ const ProductDetails = () => {
 
 
   useEffect(() => {
-    const ProduCards = axios
-      .get(`https://fakestoreapi.com/products/${Product_id}`)
+    const ProduCards = axiosClient
+      .get(`products/${Product_id}`)
       .then((data) => {
         setProduct(data.data);
         setIsLododing(false)

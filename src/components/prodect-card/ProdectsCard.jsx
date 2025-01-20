@@ -25,6 +25,9 @@ import { Link } from "react-router-dom";
 import { addToCart } from "../Slices/cart/cartItems";
 import { useDispatch } from "react-redux";
 import PaginationMui from "@mui/material/Pagination";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import axiosClient from "../../Client/axios Intarsence";
 
 const ProdectsCard = () => {
   const [filterCategorie, setFilterCategories] = useState([]);
@@ -40,9 +43,9 @@ const ProdectsCard = () => {
   const dispactch = useDispatch();
 
   const filterProducts = (categoryProduct) => {
-    const filterCategory = Products.filter(
-      (item) => item.category === categoryProduct.value
-    );
+    const filterCategory = categoryProduct
+      ? Products.filter((item) => item.category === categoryProduct.value)
+      : Products;
 
     setFilterCategories(filterCategory);
     // console.log(filterCategory, "filterCAtegory");
@@ -72,8 +75,31 @@ const ProdectsCard = () => {
       });
   }, []);
 
+  const deleteProduct = (id) => {
+    axiosClient.delete(`products/${id}`).then((response) => {
+        if (response.status === 200) {
+          toast.success('Product deleted successfully!', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+            transition: Bounce,
+          });
+        } 
+      });
+  };
+  
+
+   
+
   return (
+   
     <div>
+       <ToastContainer position="top-right" />
       <Box className="mt-5 ms-3">
         <Autocomplete
           disablePortal
@@ -85,106 +111,128 @@ const ProdectsCard = () => {
           renderInput={(params) => <TextField {...params} label="Category" />}
         />
       </Box>
-      <Grid container spacing={1} className="mt-5">
+      <Grid container spacing={2} className="mt-5">
         {isLoad ? (
           <Box className="my-5 w-100 text-center">
             <CircularProgress size="3rem" />
           </Box>
         ) : (
-          filterCategorie.slice((curruntPage - 1)* itemPerPage, curruntPage * itemPerPage) ?.map((product) => (
-            <Grid item sm={2}>
-              <Card
-                style={{ maxWidth: "300px", minWidth: "200px" }}
-                key={product.id}
-                className="mx-3"
-              >
-                <Swiper
-                  spaceBetween={50}
-                  centeredSlides={true}
-                  autoplay={{
-                    delay: 5500,
-                    disableOnInteraction: false,
-                  }}
-                  pagination={{
-                    clickable: true,
-                  }}
-                  navigation={false}
-                  modules={[Autoplay, Pagination, Navigation]}
-                  className="mySwiper"
+          filterCategorie
+            .slice((curruntPage - 1) * itemPerPage, curruntPage * itemPerPage)
+            ?.map((product) => (
+              <Grid item sm={3}>
+                <Card
+                  style={{ maxWidth: "350px", minWidth: "280px" }}
+                  key={product.id}
+                  className="mx-3"
                 >
-                  <SwiperSlide className="text-center">
-                    <img
-                      width={"200px"}
-                      height={"250px"}
-                      className=""
-                      src={product.image} // Direct image URL from Fake Store API
-                      alt={product.title}
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide className="text-center">
-                    <img
-                      width={"200px"}
-                      height={"250px"}
-                      src={product.image} // Direct image URL from Fake Store API
-                      alt={product.title}
-                    />
-                  </SwiperSlide>
-                </Swiper>
-                <Box className="text-start">
-                  <Typography variant="body2" className="mt-2 text-start ms-2">
-                    {product?.category}
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    className="mt-2 text-start ms-2"
-                    sx={{ cursor: "pointer" }}
+                  <Swiper
+                    spaceBetween={50}
+                    centeredSlides={true}
+                    autoplay={{
+                      delay: 5500,
+                      disableOnInteraction: false,
+                    }}
+                    pagination={{
+                      clickable: true,
+                    }}
+                    navigation={false}
+                    modules={[Autoplay, Pagination, Navigation]}
+                    className="mySwiper"
                   >
-                    <Tooltip title={product.title} placement="top">
-                      {product?.title.length > 15
-                        ? `${product?.title.slice(0, 15)}...`
-                        : product?.title}
-                    </Tooltip>
-                  </Typography>
-                  <Rating
-                    className="ms-2"
-                    name="read-only"
-                    value={Math.round(product?.rating?.rate) || 0}
-                    readOnly
-                  />
-
-                  <Box className="d-flex justify-content-between align-items-center bg-primary text-white">
-                    <Typography variant="h6" className="ms-2">
-                      ${product?.price}
-                    </Typography>
-
-                    <Link to={`/ProductDetails/${product?.id}`}>
-                      <Tooltip
-                        sx={{ cursor: "pointer" }}
-                        title="Details"
-                        placement="top"
-                      >
-                        <InfoIcon className="ms-5 text-white" />
-                      </Tooltip>
-                    </Link>
-
-                    <Button
-                      className="my-3 me-3"
-                      variant="contained"
-                      onClick={() => dispactch(addToCart(product))}
+                    <SwiperSlide className="text-center">
+                      <img
+                        width={"200px"}
+                        height={"250px"}
+                        className=""
+                        src={product.image} // Direct image URL from Fake Store API
+                        alt={product.title}
+                      />
+                    </SwiperSlide>
+                    <SwiperSlide className="text-center">
+                      <img
+                        width={"200px"}
+                        height={"250px"}
+                        src={product.image} // Direct image URL from Fake Store API
+                        alt={product.title}
+                      />
+                    </SwiperSlide>
+                  </Swiper>
+                  <Box className="text-start">
+                    <Typography
+                      variant="body2"
+                      className="mt-2 text-start ms-2"
                     >
-                      <AddIcon /> Add
-                    </Button>
+                      {product?.category}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      className="mt-2 text-start ms-2"
+                      sx={{ cursor: "pointer" }}
+                    >
+                      <Tooltip title={product.title} placement="top">
+                        {product?.title.length > 15
+                          ? `${product?.title.slice(0, 15)}...`
+                          : product?.title}
+                      </Tooltip>
+                    </Typography>
+                    <Rating
+                      className="ms-2"
+                      name="read-only"
+                      value={Math.round(product?.rating?.rate) || 0}
+                      readOnly
+                    />
+
+                    <Box className="d-flex justify-content-between align-items-center bg-primary text-white">
+                     <Box>
+                     <Typography variant="h6" className="ms-2">
+                        ${product?.price}
+                      </Typography>
+                     </Box>
+                     <Box>
+
+                   <Tooltip title="Delete" placement='top'>
+                         <DeleteIcon className='text-white'  onClick={()=>deleteProduct(product?.id)} sx={{ cursor: 'pointer' }} />
+                        </Tooltip>
+                      <Link to={`/ProductDetails/${product?.id}`}>
+                        <Tooltip
+                          sx={{ cursor: "pointer" }}
+                          title="Details"
+                          placement="top"
+                        >
+                          <InfoIcon className=" mx-2 text-white" />
+                        </Tooltip>
+                      </Link>
+                      <Tooltip
+                          sx={{ cursor: "pointer" }}
+                          title="Add To Cart"
+                          placement="top"
+                        >
+                      <Button
+                        className="my-3 me-3"
+                        variant="contained"
+                        onClick={() => dispactch(addToCart(product))}
+                      >
+                        <AddIcon /> Add
+                      </Button>
+                      </Tooltip>
+                     </Box>
+                    </Box>
                   </Box>
-                </Box>
-              </Card>
-            </Grid>
-          ))
+                </Card>
+              </Grid>
+            ))
         )}
       </Grid>
       <Box className=" d-flex justify-content-center my-2">
-        <PaginationMui count={totalPage} variant="outlined" shape="rounded"  onChange={(e,value)=>{
-      setCurruntPage(value);
-     }} />
+        <PaginationMui
+          count={totalPage}
+          variant="outlined"
+          shape="rounded"
+          onChange={(e, value) => {
+            setCurruntPage(value);
+          }}
+        />
       </Box>
     </div>
   );
